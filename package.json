@@ -1,0 +1,11 @@
+{
+  "name": "serverless-api",
+  "version": "1.0.0",
+  "description": "Backend for [shop-react-redux-cloudfront ](https://github.com/andjared/shop-react-redux-cloudfront)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andja Zelenbaba",
+  "license": "ISC"
+}
