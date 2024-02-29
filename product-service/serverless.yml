@@ -1,23 +1,5 @@
-# Welcome to Serverless!
-#
-# This file is the main config file for your service.
-# It's very minimal at this point and uses default values.
-# You can always add more config options for more control.
-# We've included some commented out config examples here.
-# Just uncomment any of them to get that config option.
-#
-# For full config options, check the docs:
-#    docs.serverless.com
-#
-# Happy Coding!
-
 service: products-service
-# app and org for use with dashboard.serverless.com
-#app: your-app-name
-#org: your-org-name
-
-# You can pin your service to only deploy with a specific Serverless version
-# Check out our docs for more details
+useDotenv: true
 frameworkVersion: '3'
 
 provider:
@@ -37,38 +19,10 @@ provider:
           - dynamodb:UpdateItem
           - dynamodb:DeleteItem
         Resource:
-        - "arn:aws:dynamodb:eu-west-1:730335492388:table/*"
-
-
-# you can add statements to the Lambda function's IAM Role here
-#  iam:
-#    role:
-#      statements:
-#        - Effect: "Allow"
-#          Action:
-#            - "s3:ListBucket"
-#          Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#        - Effect: "Allow"
-#          Action:
-#            - "s3:PutObject"
-#          Resource:
-#            Fn::Join:
-#              - ""
-#              - - "arn:aws:s3:::"
-#                - "Ref" : "ServerlessDeploymentBucket"
-#                - "/*"
-
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
-
-# you can add packaging information here
-#package:
-#  patterns:
-#    - '!exclude-me.js'
-#    - '!exclude-me-dir/**'
-#    - include-me.js
-#    - include-me-dir/**
+        - ${env:DB_ARN}
+  environment:
+    PRODUCTS_TABLE: ${env:PRODUCTS_TABLE}
+    STOCKS_TABLE: ${env:STOCKS_TABLE}
 
 functions:
   getProductsList:
@@ -77,9 +31,7 @@ functions:
       - httpApi:
           path: /products
           method: get
-    environment:
-      PRODUCTS_TABLE: products
-      STOCKS_TABLE: stocks
+
 
   getProductById:
     handler: handler.getProductById
@@ -87,8 +39,6 @@ functions:
       - httpApi:
           path: /products/{productId}
           method: get
-    environment:
-      PRODUCTS_TABLE: products
 
   createProduct:
     handler: handler.createProduct
@@ -96,8 +46,7 @@ functions:
       - httpApi:
           path: /products
           method: post
-    environment:
-      PRODUCTS_TABLE: products
+
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
