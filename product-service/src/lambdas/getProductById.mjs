@@ -21,20 +21,27 @@ const queryProductsTable = async (productId) => {
 };
 
 export async function getProductById(event) {
-	const id = event.pathParameters.productId;
-	const product = await queryProductsTable(id);
+	try {
+		const id = event.pathParameters.productId;
+		const product = await queryProductsTable(id);
 
-	if (!product) {
+		if (!product) {
+			return {
+				statusCode: 404,
+				body: JSON.stringify({
+					message: `No product with id ${id}`,
+				}),
+			};
+		}
+
 		return {
-			statusCode: 404,
-			body: JSON.stringify({
-				message: `No product with id ${id}, tableName: ${process.env.PRODUCTS_TABLE}`,
-			}),
+			statusCode: 200,
+			body: JSON.stringify(product),
+		};
+	} catch (err) {
+		return {
+			statusCode: 400,
+			body: JSON.stringify({ message: 'Something went wrong' }),
 		};
 	}
-
-	return {
-		statusCode: 200,
-		body: JSON.stringify(product),
-	};
 }

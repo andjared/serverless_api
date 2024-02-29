@@ -11,36 +11,46 @@ const scanProductsTable = async () => {
 			.promise();
 
 		return scanResults.Items;
-	} catch (err) {
-		return {
-			statusCode: 500,
-			body: JSON.stringify({ message: 'Error scanning db' }),
-		};
+	} catch (error) {
+		throw error;
 	}
 };
 
 const scanStocksTable = async () => {
-	const scanResults = await client
-		.scan({
-			TableName: process.env.STOCKS_TABLE,
-		})
-		.promise();
+	try {
+		const scanResults = await client
+			.scan({
+				TableName: process.env.STOCKS_TABLE,
+			})
+			.promise();
 
-	return scanResults.Items;
+		return scanResults.Items;
+	} catch (error) {
+		throw error;
+	}
 };
 
-export async function getProductsList() {
-	const products = await scanProductsTable();
-	const stocks = await scanStocksTable();
+export const getProductsList = async () => {
+	try {
+		const products = await scanProductsTable();
+		const stocks = await scanStocksTable();
 
-	const joined = products.map((product) => {
-		const stockInfo = stocks.find((stock) => stock.product_id === product.id);
+		const joined = products.map((product) => {
+			const stockInfo = stocks.find((stock) => stock.product_id === product.id);
 
-		return { ...product, count: stockInfo.count || 0 };
-	});
+			return { ...product, count: stockInfo?.count || 0 };
+		});
 
-	return {
-		statusCode: 200,
-		body: JSON.stringify(joined),
-	};
-}
+		return {
+			statusCode: 200,
+			body: JSON.stringify(joined),
+		};
+	} catch (err) {
+		return {
+			statusCode: 404,
+			body: JSON.stringify({
+				message: `${err.message}`,
+			}),
+		};
+	}
+};
