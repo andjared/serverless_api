@@ -87,6 +87,9 @@ functions:
       - httpApi:
           path: /products/{productId}
           method: get
+    environment:
+      PRODUCTS_TABLE: products
+      STOCKS_TABLE: stocks
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
