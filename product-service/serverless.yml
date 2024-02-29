@@ -24,9 +24,21 @@ provider:
   name: aws
   runtime: nodejs18.x
   profile: serverlessUser
-
-  # you can overwrite defaults here
   region: eu-west-1
+  iam:
+    role:
+      statements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+          - dynamodb:Scan
+          - dynamodb:GetItem
+          - dynamodb:PutItem
+          - dynamodb:UpdateItem
+          - dynamodb:DeleteItem
+        Resource:
+        - "arn:aws:dynamodb:eu-west-1:730335492388:table/*"
+
 
 # you can add statements to the Lambda function's IAM Role here
 #  iam:
@@ -65,6 +77,10 @@ functions:
       - httpApi:
           path: /products
           method: get
+    environment:
+      PRODUCTS_TABLE: products
+      STOCKS_TABLE: stocks
+
   getProductById:
     handler: handler.getProductById
     events:
