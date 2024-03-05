@@ -1,4 +1,5 @@
 import { GetObjectCommand } from '@aws-sdk/client-s3';
+import csvParser from 'csv-parser';
 import { s3client } from '../libs/s3Client.js';
 
 export const importFileParser = async (event) => {
@@ -24,6 +25,13 @@ export const importFileParser = async (event) => {
 					console.error('Error parsing CSV:', err);
 				});
 		}
+
+		return {
+			statusCode: 200,
+			body: JSON.stringify({
+				message: 'ImportFileParser executed successfully',
+			}),
+		};
 	} catch (err) {
 		console.error(err);
 	}
