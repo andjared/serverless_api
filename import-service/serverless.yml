@@ -1,0 +1,68 @@
+service: import-service
+frameworkVersion: "3"
+useDotenv: true
+
+custom:
+  bucketName: ${env:BUCKET_NAME}
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  profile: serverlessUser
+  region: eu-west-1
+  stage: dev
+  iam:
+   role:
+     statements:
+       - Effect: "Allow"
+         Action:
+           - "s3:ListBucket"
+         Resource: "arn:aws:s3:::${self:custom.bucketName}/*"
+       - Effect: "Allow"
+         Action:
+           - "s3:*"
+         Resource: "arn:aws:s3:::${self:custom.bucketName}/*"
+  environment:
+    BUCKET_NAME: ${self:custom.bucketName}
+
+functions:
+  importProductsFile:
+    handler: handler.importProductsFile
+    events:
+     - httpApi:
+         path: /import
+         method: get
+        #  request:
+        #   parameters:
+        #     querystrings:
+        #       name: true
+        
+  importFileParser:
+    handler: handler.importFileParser
+    events:
+      - s3:
+          bucket: ${self:custom.bucketName}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploaded/
+          existing: true
+
+
+
+
+
+#    Define function environment variables here
+#    environment:
+#      variable2: value2
+
+# you can add CloudFormation resource templates here
+#resources:
+#  Resources:
+#    NewResource:
+#      Type: AWS::S3::Bucket
+#      Properties:
+#        BucketName: my-new-bucket
+#  Outputs:
+#     NewOutput:
+#       Description: "Description for the output"
+#       Value: "Some output value"
