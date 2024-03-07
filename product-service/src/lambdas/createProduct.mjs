@@ -33,6 +33,9 @@ export const createProduct = async (event) => {
 
 		return {
 			statusCode: 201,
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+			},
 			body: JSON.stringify({ message: 'Successfuly created' }),
 		};
 	} catch (err) {

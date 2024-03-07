@@ -24,6 +24,8 @@ provider:
          Resource: "arn:aws:s3:::${self:custom.bucketName}/*"
   environment:
     BUCKET_NAME: ${self:custom.bucketName}
+    REGION: ${env:REGION}
+    QUEUE_URL: ${env:QUEUE_URL}
 
 functions:
   importProductsFile:

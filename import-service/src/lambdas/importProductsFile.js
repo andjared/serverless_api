@@ -12,7 +12,7 @@ export const importProductsFile = async (event) => {
 			throw new Error('File name must be provided');
 		}
 
-		const key = `/uploaded/${name}`;
+		const key = `uploaded/${name}`;
 		const command = new PutObjectCommand({ Bucket: bucket, Key: key });
 
 		const signedUrl = await getSignedUrl(s3client, command, {
@@ -29,6 +29,9 @@ export const importProductsFile = async (event) => {
 	} catch (error) {
 		return {
 			statusCode: 500,
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+			},
 			body: JSON.stringify({ message: error.message }),
 		};
 	}
