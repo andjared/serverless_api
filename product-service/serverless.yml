@@ -32,7 +32,6 @@ functions:
           path: /products
           method: get
 
-
   getProductById:
     handler: handler.getProductById
     events:
@@ -46,6 +45,24 @@ functions:
       - httpApi:
           path: /products
           method: post
+
+  catalogBatchProcess:
+    handler: handler.catalogBatchProcess
+    events:
+      - sqs: 
+          arn:
+            Fn::GetAtt:
+              - CatalogItemsQueue
+              - Arn
+          batchSize: 5
+   
+
+resources:
+  Resources:
+    CatalogItemsQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: catalogItemsQueue
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
