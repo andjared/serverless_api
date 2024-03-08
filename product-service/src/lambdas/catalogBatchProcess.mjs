@@ -1,3 +1,9 @@
+import AWS from 'aws-sdk';
+
+const sns = new AWS.SNS();
+
+const snsTopicArn = process.env.SNS_TOPIC_ARN;
+
 export const catalogBatchProcess = async (event, context) => {
 	for (const message of event.Records) {
 		await processMessageAsync(message);
@@ -8,7 +14,15 @@ export const catalogBatchProcess = async (event, context) => {
 async function processMessageAsync(message) {
 	try {
 		console.log(`Processed message ${message.body}`);
-		await Promise.resolve(1); //Placeholder for actual async work
+		const newProduct = JSON.parse(message.body);
+		console.log(newProduct);
+		await sns
+			.publish({
+				TopicArn: snsTopicArn,
+				Subject: 'New Product Created',
+				Message: JSON.stringify(newProduct),
+			})
+			.promise();
 	} catch (err) {
 		console.error('An error occurred');
 		throw err;
