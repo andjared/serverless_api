@@ -16,7 +16,6 @@ export const importFileParser = async (event) => {
 
 			s3Stream.Body.pipe(csvParser())
 				.on('data', async (data) => {
-					console.log('sending message');
 					await sendMessageToQueue(data);
 				})
 				.on('end', () => {
@@ -31,6 +30,7 @@ export const importFileParser = async (event) => {
 			statusCode: 200,
 			headers: {
 				'Access-Control-Allow-Origin': '*',
+				'Access-Control-Allow-Credentials': true,
 			},
 			body: JSON.stringify({
 				message: 'ImportFileParser executed successfully',

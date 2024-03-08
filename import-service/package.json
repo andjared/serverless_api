@@ -15,5 +15,8 @@
 		"@aws-sdk/s3-request-presigner": "^3.525.0",
 		"csv-parser": "^3.0.0"
 	},
-	"type": "module"
+	"type": "module",
+	"devDependencies": {
+		"dotenv": "^16.4.5"
+	}
 }

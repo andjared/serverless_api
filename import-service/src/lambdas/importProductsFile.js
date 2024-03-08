@@ -23,6 +23,7 @@ export const importProductsFile = async (event) => {
 			statusCode: 200,
 			headers: {
 				'Access-Control-Allow-Origin': '*',
+				'Access-Control-Allow-Credentials': true,
 			},
 			body: JSON.stringify({ data: signedUrl }),
 		};
@@ -31,6 +32,7 @@ export const importProductsFile = async (event) => {
 			statusCode: 500,
 			headers: {
 				'Access-Control-Allow-Origin': '*',
+				'Access-Control-Allow-Credentials': true,
 			},
 			body: JSON.stringify({ message: error.message }),
 		};
