@@ -15,7 +15,6 @@ async function processMessageAsync(message) {
 	try {
 		console.log(`Processed message ${message.body}`);
 		const newProduct = JSON.parse(message.body);
-		console.log(newProduct);
 		await sns
 			.publish({
 				TopicArn: snsTopicArn,
