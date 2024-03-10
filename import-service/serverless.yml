@@ -13,6 +13,11 @@ provider:
   profile: serverlessUser
   region: eu-west-1
   stage: dev
+  httpApi:
+    authorizers:
+      basicAuthorizer:
+        type: request
+        functionArn: arn:aws:lambda:eu-west-1:730335492388:function:authorization-service-dev-basicAuthorizer
   iam:
    role:
      statements:
@@ -32,6 +37,8 @@ functions:
      - httpApi:
          path: /import
          method: get
+         authorizer: 
+          name: basicAuthorizer
     role: ImportProductsFileRole
 
 
