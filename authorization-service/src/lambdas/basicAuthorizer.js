@@ -1,13 +1,19 @@
-export const basicAuthorizer = (event) => {
-	const { headers } = event;
-	const credentials = headers.Authorization.split(' ')[1];
-	const decoded = Buffer.from(credentials, 'base64').toString();
-	console.log(credentials, 'credentials');
-	console.log(decoded, 'decoded');
+import { generateResponse } from '../helpers/generateResponse.js';
+export const basicAuthorizer = async (event) => {
+	try {
+		const { headers } = event;
 
-	const [username, password] = decoded.toString('utf-8').split(':');
+		const encoded = headers.Authorization.split(' ')[1];
+		const decoded = Buffer.from(encoded, 'base64').toString('utf-8');
+		const [username, password] = decoded.split(':');
 
-	console.log(` username: "${username}" password: "${password}"`);
-	console.log(process.env[username], 'password');
-	console.log(headers.Authorization, 'header auth');
+		const effect =
+			!process.env[username] || process.env[username] !== password
+				? 'Deny'
+				: 'Allow';
+
+		return generateResponse(username, effect, event.routeArn);
+	} catch (error) {
+		console.log(error);
+	}
 };
