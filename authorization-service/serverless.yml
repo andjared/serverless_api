@@ -1,0 +1,19 @@
+service: authorization-service
+frameworkVersion: "3"
+plugins:
+  - serverless-dotenv-plugin
+custom:
+  dotenv:
+  required:
+      env:
+        - ANDJARED
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: eu-west-1
+  profile: serverlessUser
+
+
+functions:
+  basicAuthorizer:
+    handler: handler.basicAuthorizer
