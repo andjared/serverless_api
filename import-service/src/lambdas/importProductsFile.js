@@ -25,7 +25,7 @@ export const importProductsFile = async (event) => {
 				'Access-Control-Allow-Origin': '*',
 				'Access-Control-Allow-Credentials': true,
 			},
-			body: JSON.stringify({ data: signedUrl }),
+			body: JSON.stringify({ signedUrl }),
 		};
 	} catch (error) {
 		return {
